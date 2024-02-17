@@ -1,4 +1,4 @@
-const { connectDataBase } = require("./Config/database");
+const { connectDataBase } = require("./config/database");
 const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
