@@ -1,5 +1,5 @@
 const Teacher = require("../models/Teacher");
-const generateToken = require("../middleWare/generateToken");
+const generateToken = require("../middleware/generateToken");
 
 //register teacher
 const registerTeacher = async (req, res) => {
