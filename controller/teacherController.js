@@ -99,4 +99,29 @@ const loginTeacher = async (req, res) => {
     });
   }
 };
-module.exports = { registerTeacher, loginTeacher };
+
+const myProfile = async (req, res) =>{
+  try {
+    const user = req?.user;
+    console.log(user)
+    if(!user){
+      res.status(401).json({
+        success: false,
+        message: 'Please Login Again'
+      })
+
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      teacher: user,
+    })
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error,
+    });
+  }
+}
+module.exports = { registerTeacher, loginTeacher, myProfile };
