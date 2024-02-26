@@ -1,21 +1,33 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 
 const studentModel = mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Please Enter your name"],
+      required: [true, "Please Enter your Name"],
     },
     rollNo: {
       type: String,
-      required: [true, "Please Enter your E-mail"],
+      required: [true, "Please Enter your Roll number"],
       unique: true,
+    },
+    regNo: {
+      type: String,
+      required: [true, "Please Enter your Registration number"],
+      unique: true,
+    },
+    branch: {
+      type: String,
+      required: [true, "Please Enter your Branch"],
+    },
+    sem:{
+      type: String,
+      required: [true, "Please Enter your Semester"]
     },
     teachers: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Student",
+        ref: "Teacher",
       },
     ],
     password: {
