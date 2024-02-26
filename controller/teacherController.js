@@ -191,7 +191,7 @@ const findStudent = async (req, res) => {
       return;
     }
 
-    const student = await Student.findById(id);
+    const student = await Student.findById({_id: id});
     if (!student) {
       res.status(400).json({
         success: false,
