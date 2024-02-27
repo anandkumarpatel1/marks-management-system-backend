@@ -211,4 +211,35 @@ const findStudent = async (req, res) => {
     });
   }
 };
-module.exports = { registerTeacher, loginTeacher, myProfile, findStudent, createStudent };
+
+//search student
+const searchStudent = async (req, res) =>{
+  try {
+    const student = await Student.find({
+      $or: [
+        { name: { $regex: req.params.key, $options: "i" } },
+        { regNo: { $regex: req.params.key, $options: "i" } },
+        { rollNo: { $regex: req.params.key, $options: "i" } },
+        { sem: { $regex: req.params.key, $options: "i" } },
+        { branch: { $regex: req.params.key, $options: "i" } },
+      ],
+    });
+    if (!student) {
+      return res.status(400).json({
+        success: false,
+        message: "NO students found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      student,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+module.exports = { registerTeacher, loginTeacher, myProfile, findStudent, createStudent, searchStudent };
