@@ -30,13 +30,10 @@ const studentModel = mongoose.Schema(
         ref: "Teacher",
       },
     ],
-    marks: [
-      {
-        type: String,
-      },
+    result: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Teacher",
+        ref: "Marks",
       },
     ],
     password: {

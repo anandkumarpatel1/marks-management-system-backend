@@ -1,5 +1,6 @@
 const Teacher = require("../models/Teacher");
 const Student = require("../models/Student");
+const Marks = require("../models/Marks");
 const generateToken = require("../middleware/generateToken");
 
 //register teacher
@@ -105,7 +106,6 @@ const loginTeacher = async (req, res) => {
 const myProfile = async (req, res) => {
   try {
     const user = req?.user;
-    console.log(user);
     if (!user) {
       res.status(401).json({
         success: false,
@@ -244,6 +244,37 @@ const searchStudent = async (req, res) =>{
 }
 
 const addMarks = async (req, res) =>{
-  
+  const user = req.user;
+  const {number, testNo, subject} = req.body;
+  const {id} = req.params;
+
+  const student = await Student.findById({_id: id});
+  if (!student) {
+    res.status(400).json({
+      success: false,
+      message: "Please provide valid Id",
+    });
+    return;
+  }
+
+  const mark = await Marks.create({
+    number, testNo, subject, teacher: user
+  });
+
+  if(!mark){
+    res.status(400).json({
+      success: false,
+      message: "Something error",
+    });
+    return;
+  }
+
+  student.result.push(mark._id)
+
+  await student.save()
+  res.status(200).json({
+    success: true,
+    mark,
+  })
 }
-module.exports = { registerTeacher, loginTeacher, myProfile, findStudent, createStudent, searchStudent };
+module.exports = { registerTeacher, loginTeacher, myProfile, findStudent, createStudent, searchStudent, addMarks };
