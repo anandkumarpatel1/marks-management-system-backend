@@ -30,6 +30,15 @@ const studentModel = mongoose.Schema(
         ref: "Teacher",
       },
     ],
+    marks: [
+      {
+        type: String,
+      },
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Teacher",
+      },
+    ],
     password: {
       type: String,
       required: [true, "Please Enter your password"],
