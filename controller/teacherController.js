@@ -244,6 +244,6 @@ const searchStudent = async (req, res) =>{
 }
 
 const addMarks = async (req, res) =>{
-  +
+  
 }
 module.exports = { registerTeacher, loginTeacher, myProfile, findStudent, createStudent, searchStudent };
