@@ -128,56 +128,56 @@ const myProfile = async (req, res) => {
 };
 
 //create new student
-const createStudent = async (req, res) =>{
+const createStudent = async (req, res) => {
   try {
-    const {name, rollNo, regNo, branch, sem, password} = req.body;
+    const { name, rollNo, regNo, branch, sem, password } = req.body;
 
-    if(!name || !rollNo || !regNo || !branch || !sem || !password){
+    if (!name || !rollNo || !regNo || !branch || !sem || !password) {
       res.status(400).json({
         success: false,
-        message: 'Please Provide all details'
-      })
+        message: "Please Provide all details",
+      });
       return;
     }
 
-    const existStudent = await Student.findOne({regNo})
-    if(existStudent){
+    const existStudent = await Student.findOne({ regNo });
+    if (existStudent) {
       res.status(400).json({
         success: false,
-        message: 'Student is already exists'
-      })
+        message: "Student is already exists",
+      });
       return;
     }
 
     const student = await Student.create({
       name,
-      rollNo, 
+      rollNo,
       regNo,
       branch,
       sem,
-      password
-    })
+      password,
+    });
 
-    if(!student){
+    if (!student) {
       res.status(400).json({
         success: false,
-        message: 'Student not created'
-      })
-      return
+        message: "Student not created",
+      });
+      return;
     }
 
     res.status(201).json({
       success: true,
-      message: 'Student created successful',
-      student
-    })
+      message: "Student created successful",
+      student,
+    });
   } catch (error) {
     res.status(400).json({
       success: false,
       message: error,
     });
   }
-}
+};
 
 //finding student
 const findStudent = async (req, res) => {
@@ -191,7 +191,7 @@ const findStudent = async (req, res) => {
       return;
     }
 
-    const student = await Student.findById({_id: id});
+    const student = await Student.findById({ _id: id });
     if (!student) {
       res.status(400).json({
         success: false,
@@ -202,8 +202,8 @@ const findStudent = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      student
-    })
+      student,
+    });
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -213,7 +213,7 @@ const findStudent = async (req, res) => {
 };
 
 //search student
-const searchStudent = async (req, res) =>{
+const searchStudent = async (req, res) => {
   try {
     const student = await Student.find({
       $or: [
@@ -241,40 +241,58 @@ const searchStudent = async (req, res) =>{
       message: error.message,
     });
   }
-}
+};
 
-const addMarks = async (req, res) =>{
-  const user = req.user;
-  const {number, testNo, subject} = req.body;
-  const {id} = req.params;
+const addMarks = async (req, res) => {
+  try {
+    const user = req.user;
+    const { number, testNo, subject } = req.body;
+    const { id } = req.params;
 
-  const student = await Student.findById({_id: id});
-  if (!student) {
+    const student = await Student.findById({ _id: id });
+    if (!student) {
+      res.status(400).json({
+        success: false,
+        message: "Please provide valid Id",
+      });
+      return;
+    }
+
+    const mark = await Marks.create({
+      number,
+      testNo,
+      subject,
+      teacher: user,
+    });
+
+    if (!mark) {
+      res.status(400).json({
+        success: false,
+        message: "Something error",
+      });
+      return;
+    }
+
+    student.result.push(mark._id);
+
+    await student.save();
+    res.status(200).json({
+      success: true,
+      mark,
+    });
+  } catch (error) {
     res.status(400).json({
       success: false,
-      message: "Please provide valid Id",
+      message: error,
     });
-    return;
   }
-
-  const mark = await Marks.create({
-    number, testNo, subject, teacher: user
-  });
-
-  if(!mark){
-    res.status(400).json({
-      success: false,
-      message: "Something error",
-    });
-    return;
-  }
-
-  student.result.push(mark._id)
-
-  await student.save()
-  res.status(200).json({
-    success: true,
-    mark,
-  })
-}
-module.exports = { registerTeacher, loginTeacher, myProfile, findStudent, createStudent, searchStudent, addMarks };
+};
+module.exports = {
+  registerTeacher,
+  loginTeacher,
+  myProfile,
+  findStudent,
+  createStudent,
+  searchStudent,
+  addMarks,
+};

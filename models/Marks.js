@@ -14,6 +14,7 @@ const marksModel = mongoose.Schema(
     testNo:{
         type: String,
         required: [true, "Please Enter Test"],
+        unique: false
     },
     teacher: {
       type: mongoose.Schema.Types.ObjectId,
