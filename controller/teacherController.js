@@ -191,7 +191,7 @@ const findStudent = async (req, res) => {
       return;
     }
 
-    const student = await Student.findById({ _id: id });
+    const student = await Student.findById({ _id: id }).populate('result');
     if (!student) {
       res.status(400).json({
         success: false,
@@ -287,6 +287,7 @@ const addMarks = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   registerTeacher,
   loginTeacher,
