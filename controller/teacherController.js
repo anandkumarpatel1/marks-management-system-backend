@@ -117,6 +117,7 @@ const myProfile = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      message: `Welcome ${user.name}`,
       teacher: user,
     });
   } catch (error) {
