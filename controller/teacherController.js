@@ -192,7 +192,7 @@ const findStudent = async (req, res) => {
       return;
     }
 
-    const student = await Student.findById({ _id: id }).populate('result');
+    const student = await Student.findById({ _id: id }).populate("result");
     if (!student) {
       res.status(400).json({
         success: false,
@@ -244,6 +244,7 @@ const searchStudent = async (req, res) => {
   }
 };
 
+//add marks
 const addMarks = async (req, res) => {
   try {
     const user = req.user;
@@ -289,6 +290,32 @@ const addMarks = async (req, res) => {
   }
 };
 
+//find all students
+const findAllStudents = async (req, res) => {
+  try {
+    const student = await Student.find();
+
+    if (!student) {
+      res.status(200).json({
+        success: true,
+        message: "No student found",
+      });
+
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      student,
+      totalStudent: student.length,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error,
+    });
+  }
+};
 module.exports = {
   registerTeacher,
   loginTeacher,
@@ -297,4 +324,5 @@ module.exports = {
   createStudent,
   searchStudent,
   addMarks,
+  findAllStudents,
 };
